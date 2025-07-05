@@ -1,0 +1,194 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper functions for user roles and permissions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isAuthenticated() &&
+             request.auth.token.admin == true;
+    }
+
+    function isEnumerator() {
+      return isAuthenticated() &&
+             (request.auth.token.enumerator == true || request.auth.token.admin == true);
+    }
+
+    function isViewer() {
+      return isAuthenticated() &&
+             (request.auth.token.viewer == true ||
+              request.auth.token.enumerator == true ||
+              request.auth.token.admin == true);
+    }
+
+    function getProvince() {
+      return request.auth.token.province;
+    }
+
+    function canAccessProvince(province) {
+      return isAdmin() || getProvince() == province;
+    }
+
+    function isValidCitizenData(data) {
+      return data.keys().hasAll([
+        'fullName', 'dateOfBirth', 'sex', 'province',
+        'district', 'llg', 'village', 'nationalIdNumber',
+        'maritalStatus', 'educationLevel', 'occupation',
+        'tribe', 'landOwnership', 'disabilityStatus',
+        'voterStatus', 'biometricConsent', 'synced'
+      ]) &&
+      // Validate required string fields
+      data.fullName is string && data.fullName.size() > 0 &&
+      data.nationalIdNumber is string && data.nationalIdNumber.size() > 0 &&
+      data.province is string && data.province.size() > 0 &&
+      data.district is string && data.district.size() > 0 &&
+      data.llg is string && data.llg.size() > 0 &&
+      data.village is string && data.village.size() > 0 &&
+      // Validate enum fields
+      data.sex in ['Male', 'Female', 'Other'] &&
+      // Validate PNG provinces
+      data.province in [
+        'Central', 'Chimbu', 'Eastern Highlands', 'East New Britain',
+        'East Sepik', 'Enga', 'Gulf', 'Hela', 'Jiwaka', 'Madang',
+        'Manus', 'Milne Bay', 'Morobe', 'National Capital District',
+        'New Ireland', 'Northern', 'Southern Highlands', 'Western',
+        'Western Highlands', 'West New Britain', 'West Sepik'
+      ] &&
+      // Validate boolean fields
+      data.disabilityStatus is bool &&
+      data.voterStatus is bool &&
+      data.biometricConsent is bool &&
+      data.synced is bool &&
+      // Validate timestamps
+      data.createdAt is string &&
+      data.updatedAt is string;
+    }
+
+    function isValidUpdate(data) {
+      return data.keys().hasAny([
+        'fullName', 'dateOfBirth', 'sex', 'province', 'district',
+        'llg', 'village', 'phoneNumber', 'maritalStatus',
+        'educationLevel', 'occupation', 'tribe', 'landOwnership',
+        'disabilityStatus', 'voterStatus', 'biometricConsent',
+        'photo', 'fingerprint', 'gpsCoordinates', 'updatedAt'
+      ]) &&
+      // Cannot update certain system fields
+      !data.keys().hasAny(['id', 'createdAt', 'nationalIdNumber']);
+    }
+
+    // Citizens collection - main data
+    match /citizens/{citizenId} {
+      // Read access: Viewers and above can read citizens from their province
+      allow read: if isViewer() &&
+                    (isAdmin() || canAccessProvince(resource.data.province));
+
+      // Create access: Enumerators and above can create citizens
+      allow create: if isEnumerator() &&
+                      isValidCitizenData(request.resource.data) &&
+                      (isAdmin() || canAccessProvince(request.resource.data.province)) &&
+                      // Ensure createdBy field is set to current user
+                      request.resource.data.createdBy == request.auth.uid &&
+                      request.resource.data.createdAt == request.time &&
+                      request.resource.data.updatedAt == request.time;
+
+      // Update access: Enumerators can update citizens they created or admins can update any
+      allow update: if isEnumerator() &&
+                      isValidUpdate(request.resource.data) &&
+                      (isAdmin() ||
+                       (canAccessProvince(resource.data.province) &&
+                        resource.data.createdBy == request.auth.uid)) &&
+                      // Ensure updatedAt is set to current time
+                      request.resource.data.updatedAt == request.time;
+
+      // Delete access: Only admins can delete citizens
+      allow delete: if isAdmin();
+    }
+
+    // Backups collection - for data protection
+    match /backups/{backupId} {
+      // Only admins can manage backups
+      allow read, write: if isAdmin();
+
+      // Ensure backup metadata is valid
+      allow create: if isAdmin() &&
+                      request.resource.data.keys().hasAll([
+                        'createdAt', 'createdBy', 'totalRecords', 'version'
+                      ]) &&
+                      request.resource.data.createdBy == request.auth.uid;
+    }
+
+    // System metadata collection
+    match /system/{document} {
+      // Read access for authenticated users
+      allow read: if isAuthenticated();
+
+      // Write access only for admins
+      allow write: if isAdmin();
+    }
+
+    // User profiles collection
+    match /users/{userId} {
+      // Users can read/write their own profile
+      allow read, write: if isAuthenticated() &&
+                           request.auth.uid == userId;
+
+      // Admins can read/write all profiles
+      allow read, write: if isAdmin();
+
+      // Validate user profile data
+      allow create, update: if request.resource.data.keys().hasAll([
+        'email', 'role', 'province', 'createdAt', 'updatedAt'
+      ]) &&
+      request.resource.data.role in ['admin', 'enumerator', 'viewer'] &&
+      request.resource.data.province in [
+        'Central', 'Chimbu', 'Eastern Highlands', 'East New Britain',
+        'East Sepik', 'Enga', 'Gulf', 'Hela', 'Jiwaka', 'Madang',
+        'Manus', 'Milne Bay', 'Morobe', 'National Capital District',
+        'New Ireland', 'Northern', 'Southern Highlands', 'Western',
+        'Western Highlands', 'West New Britain', 'West Sepik'
+      ];
+    }
+
+    // Audit logs collection - for tracking all operations
+    match /audit_logs/{logId} {
+      // Only allow reading audit logs for admins
+      allow read: if isAdmin();
+
+      // Allow system to write audit logs
+      allow create: if isAuthenticated() &&
+                      request.resource.data.keys().hasAll([
+                        'userId', 'action', 'resource', 'timestamp'
+                      ]) &&
+                      request.resource.data.userId == request.auth.uid;
+    }
+
+    // Connection test endpoint - for health checks
+    match /connection-test/{testId} {
+      allow read, create: if isAuthenticated();
+      allow delete: if isAdmin();
+    }
+
+    // Statistics collection - for dashboard data
+    match /statistics/{statId} {
+      allow read: if isViewer();
+      allow write: if isAdmin();
+    }
+
+    // Reports collection - for generated reports
+    match /reports/{reportId} {
+      allow read: if isViewer() &&
+                    (isAdmin() || canAccessProvince(resource.data.province));
+      allow create: if isEnumerator() &&
+                      (isAdmin() || canAccessProvince(request.resource.data.province));
+      allow update, delete: if isAdmin();
+    }
+
+    // Default deny rule - explicit security
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
