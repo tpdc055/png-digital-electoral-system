@@ -168,41 +168,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLoginSuccess }) => {
             </Button>
           </form>
 
-          {/* Demo Login Buttons for Easy Access */}
-          <div className="mt-6 p-4 bg-yellow-50 rounded-lg border border-yellow-200">
-            <h4 className="font-semibold text-yellow-800 mb-3 text-center">🧪 Demo Access</h4>
-            <div className="space-y-2">
-              <Button
-                onClick={() => {
-                  setCredentials({ email: 'admin@demo.png', password: 'demo123' });
-                  setError(null);
-                }}
-                variant="outline"
-                className="w-full bg-red-50 border-red-200 text-red-700 hover:bg-red-100"
-                disabled={isLoading}
-              >
-                <Shield className="h-4 w-4 mr-2" />
-                Demo Admin Access
-                <Badge variant="outline" className="ml-2 text-xs">Election Configuration</Badge>
-              </Button>
 
-              <Button
-                onClick={() => {
-                  setCredentials({ email: 'enumerator@demo.png', password: 'demo123' });
-                  setError(null);
-                }}
-                variant="outline"
-                className="w-full bg-orange-50 border-orange-200 text-orange-700 hover:bg-orange-100"
-                disabled={isLoading}
-              >
-                <User className="h-4 w-4 mr-2" />
-                Demo Enumerator Access
-              </Button>
-            </div>
-            <p className="text-xs text-yellow-600 mt-2 text-center">
-              Click to auto-fill credentials, then press "Sign In"
-            </p>
-          </div>
 
           {/* System Information */}
           <div className="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">

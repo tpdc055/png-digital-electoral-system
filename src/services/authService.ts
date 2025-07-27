@@ -86,7 +86,7 @@ class AuthService {
 
   constructor() {
     this.initializeAuth();
-    this.setupDemoUsers();
+    // Demo users disabled for production
   }
 
   private initializeAuth() {
@@ -258,25 +258,7 @@ class AuthService {
         pass = emailOrCredentials.password;
       }
 
-      // Check if this is a demo user
-      const demoUsers = [
-        { email: 'admin@electoral.gov.pg', password: 'admin@12345', role: 'system_administrator' },
-        { email: 'commissioner@electoral.gov.pg', password: 'commissioner@12345', role: 'electoral_commissioner' },
-        { email: 'registration@electoral.gov.pg', password: 'registration@12345', role: 'registration_officer' },
-        { email: 'enumerator@electoral.gov.pg', password: 'enumerator@12345', role: 'field_enumerator' },
-        { email: 'tally@electoral.gov.pg', password: 'tally@12345', role: 'tally_officer' },
-        { email: 'observer@electoral.gov.pg', password: 'observer@12345', role: 'observer' }
-      ];
-
-      const demoUser = demoUsers.find(user => user.email === email && user.password === pass);
-
-      if (demoUser) {
-        // Use demo login for demo users
-        await this.signInAsDemo(demoUser.role);
-        return;
-      }
-
-      // Otherwise use Firebase authentication
+      // Production Firebase authentication only
       await signInWithEmailAndPassword(auth, email, pass);
     } catch (error: any) {
       this.authState.loading = false;
