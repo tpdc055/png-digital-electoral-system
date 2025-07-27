@@ -38,25 +38,5 @@
     "VITE_DISABLE_FIREBASE_INIT": "false",
     "NODE_ENV": "production",
     "VITE_ENVIRONMENT": "production"
-  },
-  "images": {
-    "remotePatterns": [
-      {
-        "protocol": "https",
-        "hostname": "source.unsplash.com"
-      },
-      {
-        "protocol": "https",
-        "hostname": "images.unsplash.com"
-      },
-      {
-        "protocol": "https",
-        "hostname": "ext.same-assets.com"
-      },
-      {
-        "protocol": "https",
-        "hostname": "ugc.same-assets.com"
-      }
-    ]
   }
 }
