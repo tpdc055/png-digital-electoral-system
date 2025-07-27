@@ -59,6 +59,10 @@ export const AuthenticatedApp: React.FC = () => {
   };
 
   const getAvailableTabs = () => {
+    // 🚀 FULL ACCESS MODE - Show all tabs for testing
+    return ["register", "candidates", "elections", "testing", "devices", "voting", "admin", "backup", "users", "rbac", "enhanced-rbac"];
+  };
+  const getAvailableTabsOriginal = () => {
     const tabs = [];
 
     // Register tab - available to registration officers and admins
