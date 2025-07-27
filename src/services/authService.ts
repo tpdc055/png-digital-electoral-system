@@ -130,21 +130,21 @@ class AuthService {
     const demoUsers = [
       {
         uid: 'demo-admin',
-        email: 'admin@electoral.png.gov',
+        email: 'admin@electoral.gov.pg',
         displayName: 'System Administrator',
         roles: ['system_administrator'],
         province: 'National Capital District'
       },
       {
         uid: 'demo-commissioner',
-        email: 'commissioner@electoral.png.gov',
+        email: 'commissioner@electoral.gov.pg',
         displayName: 'Electoral Commissioner',
         roles: ['electoral_commissioner'],
         province: 'National Capital District'
       },
       {
         uid: 'demo-registration',
-        email: 'registration@electoral.png.gov',
+        email: 'registration@electoral.gov.pg',
         displayName: 'Registration Officer',
         roles: ['registration_officer'],
         province: 'National Capital District',
@@ -152,7 +152,7 @@ class AuthService {
       },
       {
         uid: 'demo-enumerator',
-        email: 'enumerator@electoral.png.gov',
+        email: 'enumerator@electoral.gov.pg',
         displayName: 'Field Enumerator',
         roles: ['field_enumerator'],
         province: 'Morobe',
@@ -160,14 +160,14 @@ class AuthService {
       },
       {
         uid: 'demo-tally',
-        email: 'tally@electoral.png.gov',
+        email: 'tally@electoral.gov.pg',
         displayName: 'Tally Officer',
         roles: ['tally_officer'],
         province: 'National Capital District'
       },
       {
         uid: 'demo-observer',
-        email: 'observer@electoral.png.gov',
+        email: 'observer@electoral.gov.pg',
         displayName: 'Election Observer',
         roles: ['observer'],
         province: 'National Capital District'
@@ -258,6 +258,25 @@ class AuthService {
         pass = emailOrCredentials.password;
       }
 
+      // Check if this is a demo user
+      const demoUsers = [
+        { email: 'admin@electoral.gov.pg', password: 'admin@12345', role: 'system_administrator' },
+        { email: 'commissioner@electoral.gov.pg', password: 'commissioner@12345', role: 'electoral_commissioner' },
+        { email: 'registration@electoral.gov.pg', password: 'registration@12345', role: 'registration_officer' },
+        { email: 'enumerator@electoral.gov.pg', password: 'enumerator@12345', role: 'field_enumerator' },
+        { email: 'tally@electoral.gov.pg', password: 'tally@12345', role: 'tally_officer' },
+        { email: 'observer@electoral.gov.pg', password: 'observer@12345', role: 'observer' }
+      ];
+
+      const demoUser = demoUsers.find(user => user.email === email && user.password === pass);
+
+      if (demoUser) {
+        // Use demo login for demo users
+        await this.signInAsDemo(demoUser.role);
+        return;
+      }
+
+      // Otherwise use Firebase authentication
       await signInWithEmailAndPassword(auth, email, pass);
     } catch (error: any) {
       this.authState.loading = false;
@@ -272,32 +291,32 @@ class AuthService {
     const demoUsers: Record<string, any> = {
       'system_administrator': {
         uid: 'demo-admin',
-        email: 'admin@electoral.png.gov',
+        email: 'admin@electoral.gov.pg',
         displayName: 'System Administrator'
       },
       'electoral_commissioner': {
         uid: 'demo-commissioner',
-        email: 'commissioner@electoral.png.gov',
+        email: 'commissioner@electoral.gov.pg',
         displayName: 'Electoral Commissioner'
       },
       'registration_officer': {
         uid: 'demo-registration',
-        email: 'registration@electoral.png.gov',
+        email: 'registration@electoral.gov.pg',
         displayName: 'Registration Officer'
       },
       'field_enumerator': {
         uid: 'demo-enumerator',
-        email: 'enumerator@electoral.png.gov',
+        email: 'enumerator@electoral.gov.pg',
         displayName: 'Field Enumerator'
       },
       'tally_officer': {
         uid: 'demo-tally',
-        email: 'tally@electoral.png.gov',
+        email: 'tally@electoral.gov.pg',
         displayName: 'Tally Officer'
       },
       'observer': {
         uid: 'demo-observer',
-        email: 'observer@electoral.png.gov',
+        email: 'observer@electoral.gov.pg',
         displayName: 'Election Observer'
       }
     };
