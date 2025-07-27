@@ -1,0 +1,106 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "citizens",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "province",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "createdAt",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "citizens",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "province",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "synced",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "updatedAt",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "citizens",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "voterStatus",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "province",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "citizens",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "nationalIdNumber",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "users",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "role",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "province",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "backups",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "metadata.createdAt",
+          "order": "DESCENDING"
+        }
+      ]
+    }
+  ],
+  "fieldOverrides": [
+    {
+      "collectionGroup": "citizens",
+      "fieldPath": "fullName",
+      "indexes": [
+        {
+          "order": "ASCENDING",
+          "queryScope": "COLLECTION"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "citizens",
+      "fieldPath": "village",
+      "indexes": [
+        {
+          "order": "ASCENDING",
+          "queryScope": "COLLECTION"
+        }
+      ]
+    }
+  ]
+}

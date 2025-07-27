@@ -1,0 +1,22 @@
+{
+  "name": "PNG Digital Electoral System",
+  "short_name": "PNG Electoral",
+  "description": "Papua New Guinea Digital Electoral Voting System for 2027 National General Election",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#dc2626",
+  "theme_color": "#dc2626",
+  "orientation": "portrait",
+  "scope": "/",
+  "lang": "en-US",
+  "categories": ["government", "utilities", "productivity"],
+  "icons": [],
+  "features": [
+    "offline-voting",
+    "biometric-verification",
+    "multi-language-support",
+    "accessibility-features"
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false
+}

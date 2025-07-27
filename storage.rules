@@ -1,0 +1,60 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Authentication required for all operations
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // Check if user is admin
+    function isAdmin() {
+      return isAuthenticated() &&
+             request.auth.token.admin == true;
+    }
+
+    // Check if user can access province data
+    function canAccessProvince(province) {
+      return isAdmin() ||
+             request.auth.token.province == province;
+    }
+
+    // Citizen photos - organized by province
+    match /citizen-photos/{province}/{citizenId} {
+      allow read, write: if isAuthenticated() && canAccessProvince(province);
+      allow delete: if isAdmin();
+    }
+
+    // Citizen fingerprints - organized by province
+    match /citizen-fingerprints/{province}/{citizenId} {
+      allow read, write: if isAuthenticated() && canAccessProvince(province);
+      allow delete: if isAdmin();
+    }
+
+    // System backups - admin only
+    match /backups/{backupId} {
+      allow read, write, delete: if isAdmin();
+    }
+
+    // User profile images
+    match /user-profiles/{userId} {
+      allow read, write: if isAuthenticated() &&
+                           (request.auth.uid == userId || isAdmin());
+    }
+
+    // Audit files and logs - admin only
+    match /audit/{allPaths=**} {
+      allow read, write: if isAdmin();
+    }
+
+    // Temporary uploads - user can upload to their own folder
+    match /temp/{userId}/{allPaths=**} {
+      allow read, write, delete: if isAuthenticated() &&
+                                   request.auth.uid == userId;
+    }
+
+    // Default deny all other paths
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

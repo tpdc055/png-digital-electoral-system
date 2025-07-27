@@ -1,0 +1,62 @@
+{
+  "buildCommand": "bun run build",
+  "outputDirectory": "dist",
+  "installCommand": "bun install",
+  "framework": "vite",
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Frame-Options",
+          "value": "SAMEORIGIN"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "camera=*, microphone=*, geolocation=*"
+        }
+      ]
+    }
+  ],
+  "env": {
+    "VITE_DEMO_MODE": "false",
+    "VITE_ENABLE_DEMO_USERS": "false",
+    "VITE_DISABLE_FIREBASE_INIT": "false",
+    "NODE_ENV": "production",
+    "VITE_ENVIRONMENT": "production"
+  },
+  "images": {
+    "remotePatterns": [
+      {
+        "protocol": "https",
+        "hostname": "source.unsplash.com"
+      },
+      {
+        "protocol": "https",
+        "hostname": "images.unsplash.com"
+      },
+      {
+        "protocol": "https",
+        "hostname": "ext.same-assets.com"
+      },
+      {
+        "protocol": "https",
+        "hostname": "ugc.same-assets.com"
+      }
+    ]
+  }
+}

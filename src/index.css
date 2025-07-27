@@ -1,0 +1,230 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
+    --primary: 240 5.9% 10%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 240 4.8% 95.9%;
+    --secondary-foreground: 240 5.9% 10%;
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
+    --accent: 240 4.8% 95.9%;
+    --accent-foreground: 240 5.9% 10%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+    --ring: 240 5.9% 10%;
+    --radius: 0.5rem;
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+  }
+
+  .dark {
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 240 10% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 240 5.9% 10%;
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
+    --accent: 240 3.7% 15.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 240 4.9% 83.9%;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Traditional PNG Pattern Background */
+.traditional-pattern-bg {
+  background-image:
+    url('https://ugc.same-assets.com/jXzl2npXyJ5N9SFC_nTz5tD2y80sVNDI.jpeg');
+  background-size: 200px 200px;
+  background-repeat: repeat;
+  background-attachment: fixed;
+  opacity: 0.05;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* PNG Themed Colors */
+.png-primary {
+  background: linear-gradient(135deg, #D4AF37 0%, #B8860B 50%, #8B4513 100%);
+}
+
+.png-secondary {
+  background: linear-gradient(135deg, #228B22 0%, #006400 50%, #2F4F4F 100%);
+}
+
+/* Enhanced Header with PNG Identity */
+.png-header {
+  background: linear-gradient(135deg, #B8860B 0%, #D4AF37 30%, #8B4513 100%);
+  border-bottom: 4px solid #228B22;
+  box-shadow: 0 4px 15px rgba(184, 134, 11, 0.3);
+}
+
+/* Traditional Pattern Overlay for Cards */
+.traditional-overlay::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url('https://ugc.same-assets.com/jXzl2npXyJ5N9SFC_nTz5tD2y80sVNDI.jpeg');
+  background-size: 100px 100px;
+  background-repeat: repeat;
+  opacity: 0.03;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Bird of Paradise accent colors */
+.bird-accent {
+  color: #FF6B35;
+}
+
+.bird-accent-bg {
+  background-color: #FF6B35;
+}
+
+/* PNG Flag inspired colors */
+.flag-red {
+  background-color: #CE1126;
+}
+
+.flag-yellow {
+  background-color: #FFD100;
+}
+
+.flag-black {
+  background-color: #000000;
+}
+
+/* Cultural Pattern Border */
+.cultural-border {
+  border: 3px solid transparent;
+  border-image: linear-gradient(45deg, #D4AF37, #228B22, #CE1126, #FFD100) 1;
+}
+
+/* Enhanced button styles with PNG colors */
+.png-button-primary {
+  background: linear-gradient(135deg, #D4AF37 0%, #B8860B 100%);
+  border: 2px solid #228B22;
+  color: white;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.png-button-primary:hover {
+  background: linear-gradient(135deg, #B8860B 0%, #8B4513 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(184, 134, 11, 0.4);
+}
+
+/* Logo container styles */
+.png-logo {
+  width: 48px;
+  height: 48px;
+  background-image: url('https://ugc.same-assets.com/5ZOnN3uW0I2TeOlFCq97pyqce-GyWnIY.jpeg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  filter: brightness(1.2) contrast(1.1);
+}
+
+/* Tab styling with PNG colors */
+.png-tabs {
+  background: rgba(212, 175, 55, 0.1);
+  border-radius: 12px;
+  padding: 4px;
+  border: 2px solid rgba(34, 139, 34, 0.2);
+}
+
+/* Statistical cards with cultural styling */
+.png-stat-card {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.95) 100%);
+  border: 2px solid rgba(212, 175, 55, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.png-stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #D4AF37, #228B22, #CE1126, #FFD100);
+}
+
+/* Form styling with PNG theme */
+.png-form-field {
+  border: 2px solid rgba(212, 175, 55, 0.3);
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.png-form-field:focus {
+  border-color: #228B22;
+  box-shadow: 0 0 0 3px rgba(34, 139, 34, 0.1);
+}
+
+/* Mobile responsiveness for traditional patterns */
+@media (max-width: 768px) {
+  .traditional-pattern-bg {
+    background-size: 150px 150px;
+  }
+
+  .traditional-overlay::before {
+    background-size: 75px 75px;
+  }
+
+  .png-logo {
+    width: 40px;
+    height: 40px;
+  }
+}
